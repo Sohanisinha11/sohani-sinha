@@ -24,7 +24,13 @@ body {
     text-align: center;
     padding: 20px 0;
     overflow-x: hidden;
-    background: linear-gradient(135deg, #200018, #af125e, #350044);
+
+    background: linear-gradient(
+        135deg,
+        #200018,
+        #af125e,
+        #350044
+    );
 }
 
 .container {
@@ -124,7 +130,7 @@ p {
 @keyframes heartRain {
     0% {
         opacity: 1;
-        transform: translateY(0) scale(0.5) rotate(0deg);
+        transform: translateY(0) scale(0.5);
     }
 
     100% {
@@ -137,24 +143,18 @@ p {
     0% {
         opacity: 0;
         transform: scale(0.15) rotate(-12deg);
-        clip-path: polygon(
-            50% 100%, 0 50%, 0 20%, 20% 0,
-            50% 25%, 80% 0, 100% 20%, 100% 50%
-        );
         filter: blur(8px);
     }
 
     70% {
         opacity: 1;
         transform: scale(1.04) rotate(2deg);
-        clip-path: inset(0 round 25px);
         filter: blur(0);
     }
 
     100% {
         opacity: 1;
         transform: scale(1) rotate(0);
-        clip-path: inset(0 round 25px);
         filter: blur(0);
     }
 }
@@ -192,8 +192,8 @@ p {
 <body>
 
 <!-- Background Music -->
-<audio id="backgroundMusic" loop>
-    <source src="Music/voice-message.ogg.ogg" type="audio/mpeg">
+<audio id="backgroundMusic" loop preload="auto">
+    <source src="./music/song.ogg" type="audio/ogg">
 </audio>
 
 <div class="container" id="mainContainer">
@@ -215,33 +215,40 @@ p {
 
 <script>
 
+// Main elements
 const container = document.getElementById("mainContainer");
 const music = document.getElementById("backgroundMusic");
 
 music.volume = 0.7;
 
+// Start music on user interaction.
+// Chrome may block autoplay before the first interaction.
+function startMusic() {
+    if (music.paused) {
+        music.play().catch(error => {
+            console.log("Music could not play:", error);
+        });
+    }
+}
+
 // Try autoplay when website opens
 window.addEventListener("load", function() {
     music.play().catch(() => {
-        console.log("Autoplay blocked. Music will start after interaction.");
+        console.log("Music will start after your first click.");
     });
 
     createRain(35);
 });
 
-// Start music on first user interaction if autoplay was blocked
-function startMusic() {
-    if (music.paused) {
-        music.play().catch(() => {});
-    }
-}
-
+// Start music on first click/tap anywhere
 document.addEventListener("click", startMusic, { once: true });
 
 // Page animation
 function animatePage() {
     container.style.animation = "none";
+
     void container.offsetWidth;
+
     container.style.animation = "heartOpen 1.2s ease both";
 
     createRain(35);
@@ -261,8 +268,12 @@ function createRain(count = 20) {
                 symbols[Math.floor(Math.random() * symbols.length)];
 
             item.style.left = Math.random() * 100 + "vw";
-            item.style.fontSize = (16 + Math.random() * 22) + "px";
-            item.style.animationDuration = (3 + Math.random() * 4) + "s";
+
+            item.style.fontSize =
+                (16 + Math.random() * 22) + "px";
+
+            item.style.animationDuration =
+                (3 + Math.random() * 4) + "s";
 
             document.body.appendChild(item);
 
@@ -284,8 +295,11 @@ function showHearts(x, y) {
         heart.textContent =
             hearts[Math.floor(Math.random() * hearts.length)];
 
-        heart.style.left = (x + Math.random() * 80 - 40) + "px";
-        heart.style.top = (y + Math.random() * 40 - 20) + "px";
+        heart.style.left =
+            (x + Math.random() * 80 - 40) + "px";
+
+        heart.style.top =
+            (y + Math.random() * 40 - 20) + "px";
 
         document.body.appendChild(heart);
 
@@ -314,8 +328,11 @@ function makeNoButtonMove(button) {
             window.innerHeight - button.offsetHeight - 20
         );
 
-        button.style.left = Math.max(10, Math.random() * maxX) + "px";
-        button.style.top = Math.max(10, Math.random() * maxY) + "px";
+        button.style.left =
+            Math.max(10, Math.random() * maxX) + "px";
+
+        button.style.top =
+            Math.max(10, Math.random() * maxY) + "px";
     }
 
     button.addEventListener("mouseover", move);
@@ -402,7 +419,7 @@ function marryYes() {
     animatePage();
 }
 
-// Final thank-you page (no music player)
+// Final thank-you page
 function thankYouPage() {
 
     container.innerHTML = `
@@ -427,4 +444,3 @@ function thankYouPage() {
 
 </body>
 </html>
-```

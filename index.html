@@ -1,0 +1,430 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>For My Sohani ❤️</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #200018, #af125e, #350044);
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    max-width: 600px;
+    padding: 30px 20px;
+    border: 1px solid #ffffff55;
+    border-radius: 25px;
+    background: #ffffff12;
+    box-shadow: 0 0 35px #ff4f9a55;
+    transform-origin: center;
+    animation: heartOpen 1.2s ease both;
+}
+
+h1 {
+    color: #ffb6d5;
+    font-size: clamp(30px, 7vw, 40px);
+    margin: 20px 0;
+}
+
+h2 {
+    margin: 18px 0;
+    color: #fff0f7;
+}
+
+p {
+    font-size: 18px;
+    line-height: 1.7;
+    margin: 15px 0;
+    overflow-wrap: anywhere;
+}
+
+.heart {
+    font-size: 65px;
+}
+
+.question {
+    margin-top: 25px;
+    font-size: 28px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 25px;
+    min-height: 60px;
+}
+
+.buttons button,
+.yes-btn {
+    padding: 13px 28px;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.yes-btn {
+    color: #7a123e;
+    background: #ffb6d5;
+    box-shadow: 0 0 20px #ff6fa9;
+}
+
+.no-btn {
+    color: white;
+    background: #5c3150;
+    position: relative;
+}
+
+.letter {
+    margin: 25px auto;
+    padding: 22px;
+    max-width: 500px;
+    border-radius: 20px;
+    background: #ffffff12;
+    border: 1px solid #ffb6d555;
+}
+
+.letter p {
+    margin: 15px 0;
+}
+
+.click-heart {
+    position: fixed;
+    pointer-events: none;
+    font-size: 25px;
+    z-index: 99999;
+    animation: heartRain 1.5s ease-out forwards;
+}
+
+@keyframes heartRain {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(0.5) rotate(0deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-150px) scale(1.5) rotate(35deg);
+    }
+}
+
+@keyframes heartOpen {
+    0% {
+        opacity: 0;
+        transform: scale(0.15) rotate(-12deg);
+        clip-path: polygon(
+            50% 100%, 0 50%, 0 20%, 20% 0,
+            50% 25%, 80% 0, 100% 20%, 100% 50%
+        );
+        filter: blur(8px);
+    }
+
+    70% {
+        opacity: 1;
+        transform: scale(1.04) rotate(2deg);
+        clip-path: inset(0 round 25px);
+        filter: blur(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+        clip-path: inset(0 round 25px);
+        filter: blur(0);
+    }
+}
+
+.falling-item {
+    position: fixed;
+    top: -50px;
+    z-index: 9999;
+    pointer-events: none;
+    animation: fallDown linear forwards;
+}
+
+@keyframes fallDown {
+    0% {
+        transform: translateY(-30px) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .container,
+    .click-heart,
+    .falling-item {
+        animation-duration: 0.01ms;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Background Music -->
+<audio id="backgroundMusic" loop>
+    <source src="Music/voice-message.ogg.ogg" type="audio/mpeg">
+</audio>
+
+<div class="container" id="mainContainer">
+
+    <div class="heart">❤️</div>
+
+    <h1>Hey Sohani! 💖</h1>
+
+    <p>Mere dil ka ek chhota sa sawaal hai... 🥹</p>
+
+    <h2 class="question">Do You Love Me? 🥹❤️</h2>
+
+    <div class="buttons">
+        <button class="yes-btn" onclick="loveYes()">YES 💖</button>
+        <button class="no-btn" id="noBtn">NO 🙈</button>
+    </div>
+
+</div>
+
+<script>
+
+const container = document.getElementById("mainContainer");
+const music = document.getElementById("backgroundMusic");
+
+music.volume = 0.7;
+
+// Try autoplay when website opens
+window.addEventListener("load", function() {
+    music.play().catch(() => {
+        console.log("Autoplay blocked. Music will start after interaction.");
+    });
+
+    createRain(35);
+});
+
+// Start music on first user interaction if autoplay was blocked
+function startMusic() {
+    if (music.paused) {
+        music.play().catch(() => {});
+    }
+}
+
+document.addEventListener("click", startMusic, { once: true });
+
+// Page animation
+function animatePage() {
+    container.style.animation = "none";
+    void container.offsetWidth;
+    container.style.animation = "heartOpen 1.2s ease both";
+
+    createRain(35);
+}
+
+// Falling hearts and flowers
+function createRain(count = 20) {
+    const symbols = ["❤️", "💖", "💕", "🌹", "🌸", "🌺", "💗"];
+
+    for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+            const item = document.createElement("span");
+
+            item.className = "falling-item";
+
+            item.textContent =
+                symbols[Math.floor(Math.random() * symbols.length)];
+
+            item.style.left = Math.random() * 100 + "vw";
+            item.style.fontSize = (16 + Math.random() * 22) + "px";
+            item.style.animationDuration = (3 + Math.random() * 4) + "s";
+
+            document.body.appendChild(item);
+
+            setTimeout(() => item.remove(), 7500);
+
+        }, i * 80);
+    }
+}
+
+// Hearts on every click
+function showHearts(x, y) {
+    const hearts = ["❤️", "💖", "💕", "💗", "💘", "💝"];
+
+    for (let i = 0; i < 6; i++) {
+        const heart = document.createElement("span");
+
+        heart.className = "click-heart";
+
+        heart.textContent =
+            hearts[Math.floor(Math.random() * hearts.length)];
+
+        heart.style.left = (x + Math.random() * 80 - 40) + "px";
+        heart.style.top = (y + Math.random() * 40 - 20) + "px";
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 1500);
+    }
+}
+
+document.addEventListener("click", function(event) {
+    showHearts(event.clientX, event.clientY);
+});
+
+// NO button movement
+function makeNoButtonMove(button) {
+
+    function move() {
+        button.style.position = "fixed";
+        button.style.zIndex = "1000";
+
+        const maxX = Math.max(
+            10,
+            window.innerWidth - button.offsetWidth - 20
+        );
+
+        const maxY = Math.max(
+            10,
+            window.innerHeight - button.offsetHeight - 20
+        );
+
+        button.style.left = Math.max(10, Math.random() * maxX) + "px";
+        button.style.top = Math.max(10, Math.random() * maxY) + "px";
+    }
+
+    button.addEventListener("mouseover", move);
+
+    button.addEventListener("click", function(event) {
+        event.preventDefault();
+        move();
+    });
+
+    button.addEventListener("touchstart", function(event) {
+        event.preventDefault();
+        move();
+    }, { passive: false });
+}
+
+makeNoButtonMove(document.getElementById("noBtn"));
+
+// First YES: Proposal page
+function loveYes() {
+
+    container.innerHTML = `
+        <div class="heart">💍❤️</div>
+
+        <h1>Sohani Sinha</h1>
+
+        <h2>you always with me sir jii? 🥹💖</h2>
+
+        <p>I want to make beautiful memories with you, forever. 🌹</p>
+
+        <div class="buttons">
+            <button class="yes-btn" onclick="marryYes()">YES 💍</button>
+            <button class="no-btn" id="noBtn2">NO 🙈</button>
+        </div>
+    `;
+
+    animatePage();
+
+    makeNoButtonMove(document.getElementById("noBtn2"));
+}
+
+// Second YES: Birthday page
+function marryYes() {
+
+    container.innerHTML = `
+        <div class="heart">🎂❤️</div>
+
+        <h1>Happy Birthday!</h1>
+
+        <h2>Sohani Sinha 🥹💖</h2>
+
+        <p>✨ 11 November ✨</p>
+
+        <div class="letter">
+
+            <h2>My Dear Rasgulla ❤️</h2>
+
+            <p>Happy Birthday meri chumma! 🎂💗</p>
+
+            <p>
+                Tum meri life ki sabse special person ho.
+                Tumhari smile mere liye bahut precious hai. 🥹❤️
+            </p>
+
+            <p>
+                Meri wish hai ki tumhari life hamesha happiness,
+                love aur success se bhari rahe. Tumhare saare dreams
+                poore hon. 🫶🏻✨
+            </p>
+
+            <p>
+                Mathe par lagakar, chhoti si bindi,
+                chehara jaise chand liye phirti ho...
+                vaise hi nazrein tumse hatati nahi,
+                upar se til wala gaal liye phirti ho. ❤️
+            </p>
+
+            <h2>Love You, Sohani! ♾️</h2>
+
+        </div>
+
+        <button class="yes-btn" onclick="thankYouPage()">Thank You 💌</button>
+    `;
+
+    animatePage();
+}
+
+// Final thank-you page (no music player)
+function thankYouPage() {
+
+    container.innerHTML = `
+        <div class="heart">❤️</div>
+
+        <h1>Thank You, Sohani! 💖</h1>
+
+        <h2>You are my favourite person 🥹</h2>
+
+        <p>
+            You make my world beautiful.
+            Forever and always ❤️
+        </p>
+
+        <div class="heart">💖🌹💖</div>
+    `;
+
+    animatePage();
+}
+
+</script>
+
+</body>
+</html>
+```
